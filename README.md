@@ -11,10 +11,20 @@ Aplicação em Python para baixar vídeos ou áudio do YouTube usando `yt-dlp`. 
    - **Linux:** `sudo apt install ffmpeg`
    - Confirme com `ffmpeg -version`
 
-## Instalação
+## Instalação Rápida (Windows)
+
+1. Baixe ou clone o repositório
+2. Dê duplo clique em **`instalar.bat`** — ele configura tudo automaticamente
+3. Dê duplo clique em **`iniciar.bat`** para abrir o app
+
+Pronto! Não precisa mexer em terminal.
+
+> Requisitos: [Python 3.10+](https://www.python.org/downloads/) (marque **"Add Python to PATH"** na instalação)
+
+## Instalação Manual
 
 ```bash
-git clone git@github.com:Donizetijunior/Download-video-YT.git
+git clone https://github.com/Donizetijunior/Download-video-YT.git
 cd Download-video-YT
 python -m venv venv
 ```
@@ -34,6 +44,8 @@ pip install -r requirements.txt
 ## Uso
 
 ### Interface Gráfica (recomendado)
+
+Duplo clique em `iniciar.bat` ou:
 
 ```bash
 python app.py
