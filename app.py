@@ -1,6 +1,7 @@
 import threading
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, filedialog
+from pathlib import Path
 
 import downloader
 import history
@@ -10,9 +11,11 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("YouTube Downloader")
-        self.geometry("620x520")
+        self.geometry("620x560")
         self.resizable(False, False)
         self.configure(bg="#1e1e2e")
+
+        self.cookies_path = downloader.COOKIES_FILE if downloader.COOKIES_FILE.exists() else None
 
         self._style()
         self._build_input()
@@ -39,8 +42,11 @@ class App(tk.Tk):
         self.style.map("TButton", background=[("active", accent)])
         self.style.configure("Accent.TButton", background=accent, foreground="#1e1e2e")
         self.style.map("Accent.TButton", background=[("active", "#74c7ec")])
+        self.style.configure("Small.TButton", font=("Segoe UI", 9), padding=(8, 4))
         self.style.configure("TCombobox", fieldbackground=entry_bg, foreground=fg)
         self.style.configure("Status.TLabel", font=("Segoe UI", 9), foreground="#a6adc8")
+        self.style.configure("Cookie.TLabel", font=("Segoe UI", 8), foreground="#a6e3a1")
+        self.style.configure("NoCookie.TLabel", font=("Segoe UI", 8), foreground="#f9e2af")
         self.style.configure("Treeview", background=entry_bg, foreground=fg,
                              fieldbackground=entry_bg, font=("Segoe UI", 9), rowheight=24)
         self.style.configure("Treeview.Heading", background=btn_bg, foreground=fg,
@@ -56,8 +62,7 @@ class App(tk.Tk):
 
         ttk.Label(frame, text="URL do vídeo:").pack(anchor="w", pady=(12, 4))
         self.url_var = tk.StringVar()
-        url_entry = ttk.Entry(frame, textvariable=self.url_var, font=("Segoe UI", 10))
-        url_entry.pack(fill="x")
+        ttk.Entry(frame, textvariable=self.url_var, font=("Segoe UI", 10)).pack(fill="x")
 
         options_frame = ttk.Frame(frame)
         options_frame.pack(fill="x", pady=(12, 0))
@@ -79,6 +84,15 @@ class App(tk.Tk):
                                           values=["Melhor disponível", "1080p", "720p", "480p"],
                                           state="readonly", width=18)
         self.quality_combo.pack(anchor="w", pady=(4, 0))
+
+        cookie_frame = ttk.Frame(frame)
+        cookie_frame.pack(fill="x", pady=(10, 0))
+        ttk.Button(cookie_frame, text="Importar cookies.txt", style="Small.TButton",
+                   command=self._importar_cookies).pack(side="left")
+        self.cookie_status_var = tk.StringVar()
+        self.cookie_label = ttk.Label(cookie_frame, textvariable=self.cookie_status_var)
+        self.cookie_label.pack(side="left", padx=(8, 0))
+        self._atualizar_cookie_status()
 
     def _build_action(self):
         frame = ttk.Frame(self, padding=(16, 0, 16, 0))
@@ -121,6 +135,26 @@ class App(tk.Tk):
             self.quality_combo.configure(state="disabled")
         else:
             self.quality_combo.configure(state="readonly")
+
+    def _atualizar_cookie_status(self):
+        if self.cookies_path and self.cookies_path.exists():
+            self.cookie_status_var.set(f"Cookies carregados: {self.cookies_path.name}")
+            self.cookie_label.configure(style="Cookie.TLabel")
+        else:
+            self.cookie_status_var.set("Sem cookies (alguns vídeos podem falhar)")
+            self.cookie_label.configure(style="NoCookie.TLabel")
+
+    def _importar_cookies(self):
+        path = filedialog.askopenfilename(
+            title="Selecionar cookies.txt",
+            filetypes=[("Cookies", "*.txt"), ("Todos", "*.*")],
+        )
+        if path:
+            dest = downloader.COOKIES_FILE
+            dest.write_bytes(Path(path).read_bytes())
+            self.cookies_path = dest
+            self._atualizar_cookie_status()
+            messagebox.showinfo("Cookies", "Cookies importados com sucesso!")
 
     def _atualizar_historico(self):
         for item in self.tree.get_children():
@@ -172,7 +206,8 @@ class App(tk.Tk):
 
     def _executar_download(self, url, modo, qualidade):
         try:
-            titulo = downloader.baixar(url, modo, qualidade, self._hook_progresso)
+            titulo = downloader.baixar(url, modo, qualidade, self._hook_progresso,
+                                       self.cookies_path)
             history.adicionar(titulo, modo, qualidade)
             self.after(0, self._download_concluido, titulo)
         except Exception as e:
@@ -189,7 +224,14 @@ class App(tk.Tk):
         self.progress["value"] = 0
         self.status_var.set("Erro no download.")
         self.btn_baixar.configure(state="normal")
-        messagebox.showerror("Erro", f"Falha ao baixar:\n{erro}")
+        if "Sign in" in erro or "bot" in erro:
+            messagebox.showerror("Erro", (
+                "O YouTube bloqueou o download.\n\n"
+                "Solução: exporte seus cookies do Chrome usando a extensão\n"
+                "\"Get cookies.txt LOCALLY\" e importe pelo botão na interface."
+            ))
+        else:
+            messagebox.showerror("Erro", f"Falha ao baixar:\n{erro}")
 
 
 if __name__ == "__main__":
