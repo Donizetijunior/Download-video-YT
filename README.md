@@ -69,6 +69,33 @@ Ou passe a URL direto:
 python baixar_video.py "https://www.youtube.com/watch?v=XXXXXXXXX"
 ```
 
+## Configurando Cookies (bloqueio do YouTube)
+
+Depois de alguns downloads seguidos, o YouTube pode bloquear com a mensagem **"Sign in to confirm you're not a bot"**. Isso é normal — ele detecta muitas requisições e pede autenticação.
+
+A solução é exportar os cookies da sua conta do YouTube e importar no app. Fazendo isso, o YouTube entende que é você e libera os downloads.
+
+### Passo a passo
+
+1. **Instale a extensão no Chrome:** procure por **"Get cookies.txt LOCALLY"** na [Chrome Web Store](https://chromewebstore.google.com/) e instale
+
+2. **Exporte os cookies:**
+   - Abra o YouTube no Chrome e faça login na sua conta Google (se ainda não estiver)
+   - Clique no ícone da extensão **"Get cookies.txt LOCALLY"**
+   - Clique em **"Export"** — vai baixar um arquivo `cookies.txt`
+
+3. **Importe no app:**
+   - Abra o YouTube Downloader
+   - Clique no botão **"Importar cookies.txt"**
+   - Selecione o arquivo `cookies.txt` que você exportou
+   - O status vai mudar para **"Cookies carregados"** (em verde)
+
+Pronto! Agora os downloads vão funcionar normalmente.
+
+> **Dica:** se depois de um tempo o erro voltar, é só repetir o processo — os cookies expiram.
+>
+> **Importante:** o arquivo `cookies.txt` contém dados da sua conta. Não compartilhe ele com ninguém.
+
 ## Estrutura
 
 | Arquivo | Descrição |
