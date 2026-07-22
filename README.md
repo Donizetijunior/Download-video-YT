@@ -66,7 +66,7 @@ python baixar_video.py
 Ou passe a URL direto:
 
 ```bash
-python baixar_video.py "https://www.youtube.com/watch?v=XXXXXXXXX"
+python baixar_video.py "https://www.yt.com/watch?v=XXXXXXXXX"
 ```
 
 ## Configurando Cookies (bloqueio do YT)
