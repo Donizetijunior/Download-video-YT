@@ -1,6 +1,6 @@
 # Download Video YT
 
-Aplicação em Python para baixar vídeos ou áudio do YouTube usando `yt-dlp`. Disponível com interface gráfica (GUI) e linha de comando (CLI).
+Aplicação em Python para baixar vídeos ou áudio do YT usando `yt-dlp`. Disponível com interface gráfica (GUI) e linha de comando (CLI).
 
 ## Requisitos
 
@@ -69,23 +69,23 @@ Ou passe a URL direto:
 python baixar_video.py "https://www.youtube.com/watch?v=XXXXXXXXX"
 ```
 
-## Configurando Cookies (bloqueio do YouTube)
+## Configurando Cookies (bloqueio do YT)
 
-Depois de alguns downloads seguidos, o YouTube pode bloquear com a mensagem **"Sign in to confirm you're not a bot"**. Isso é normal — ele detecta muitas requisições e pede autenticação.
+Depois de alguns downloads seguidos, o YT pode bloquear com a mensagem **"Sign in to confirm you're not a bot"**. Isso é normal — ele detecta muitas requisições e pede autenticação.
 
-A solução é exportar os cookies da sua conta do YouTube e importar no app. Fazendo isso, o YouTube entende que é você e libera os downloads.
+A solução é exportar os cookies da sua conta do YT e importar no app. Fazendo isso, o YT entende que é você e libera os downloads.
 
 ### Passo a passo
 
 1. **Instale a extensão no Chrome:** procure por **"Get cookies.txt LOCALLY"** na [Chrome Web Store](https://chromewebstore.google.com/) e instale
 
 2. **Exporte os cookies:**
-   - Abra o YouTube no Chrome e faça login na sua conta Google (se ainda não estiver)
+   - Abra o YT no Chrome e faça login na sua conta Google (se ainda não estiver)
    - Clique no ícone da extensão **"Get cookies.txt LOCALLY"**
    - Clique em **"Export"** — vai baixar um arquivo `cookies.txt`
 
 3. **Importe no app:**
-   - Abra o YouTube Downloader
+   - Abra o YT Downloader
    - Clique no botão **"Importar cookies.txt"**
    - Selecione o arquivo `cookies.txt` que você exportou
    - O status vai mudar para **"Cookies carregados"** (em verde)
@@ -105,7 +105,7 @@ Pronto! Agora os downloads vão funcionar normalmente.
 | `downloader.py` | Lógica de download (compartilhada) |
 | `history.py` | Gerenciamento do histórico |
 
-Os arquivos são salvos em `~/Downloads/YouTube/`.
+Os arquivos são salvos em `~/Downloads/YT/`.
 
 ## Observações
 
